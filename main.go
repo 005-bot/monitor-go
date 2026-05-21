@@ -19,7 +19,7 @@ import (
 	"runtime"
 	"strconv"
 
-	"github.com/capcom6/go-project-template/internal"
+	"github.com/005-bot/monitor-go/internal"
 	"github.com/go-core-fx/healthfx"
 	"github.com/samber/lo"
 )

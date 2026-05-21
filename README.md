@@ -11,21 +11,21 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/capcom6/go-project-template">
+  <a href="https://github.com/005-bot/monitor-go">
     <img src="https://raw.githubusercontent.com/golang-samples/gopher-vector/master/gopher.png" alt="Logo" width="120" height="120">
   </a>
 
-<h3 align="center">go-project-template</h3>
+<h3 align="center">[PROJECT_NAME]</h3>
 
   <p align="center">
-    Opinionated Go service template with Fiber API, OpenAPI docs, Telegram bot wiring, health endpoints, and Fx-based modular DI.
+    [Short project description - e.g., "A production-ready Go service with Fiber, OpenAPI, and modular architecture"]
     <br />
-    <a href="https://github.com/capcom6/go-project-template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/005-bot/monitor-go"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/capcom6/go-project-template/issues">Report Bug</a>
+    <a href="https://github.com/005-bot/monitor-go/issues">Report Bug</a>
     ·
-    <a href="https://github.com/capcom6/go-project-template/issues">Request Feature</a>
+    <a href="https://github.com/005-bot/monitor-go/issues">Request Feature</a>
   </p>
 </div>
 
@@ -39,6 +39,9 @@
   - [Installation](#installation)
 - [Usage](#usage)
 - [Roadmap](#roadmap)
+  - [Completed](#completed)
+  - [In Progress](#in-progress)
+  - [Planned](#planned)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -49,15 +52,17 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This repository is a production-oriented starter for backend services in Go. It ships with:
+[Brief description of your project - what it does and why it exists]
 
-* HTTP server bootstrapped with Fiber and dependency injection via Uber Fx.
-* Version + health endpoints using `healthfx`.
-* Swagger/OpenAPI docs endpoint under `/api/v1/docs`.
-* Telegram bot integration (`/start` command handler included).
-* Modular business domain example to plug in real use-cases.
+This project includes:
 
-Use this template when you want a fast path to shipping APIs and bot workflows with a clean module layout.
+* [Feature 1 - e.g., "Fiber-based HTTP server with dependency injection"]
+* [Feature 2 - e.g., "OpenAPI/Swagger documentation"]
+* [Feature 3 - e.g., "Modular architecture with Fx"]
+* [Feature 4 - e.g., "Health check endpoints"]
+* [Feature 5 - e.g., "Example domain module"]
+
+[Additional context about the project's purpose or use case]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -68,7 +73,7 @@ Use this template when you want a fast path to shipping APIs and bot workflows w
 * [![Fiber][fiber-shield]][fiber-url]
 * [![Fx][fx-shield]][fx-url]
 * [![Swagger][swagger-shield]][swagger-url]
-* [![Telegram][telegram-shield]][telegram-url]
+* [WIP - Add more technology badges as needed]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -81,33 +86,29 @@ Follow these steps to run the service locally.
 
 ### Prerequisites
 
-* Go 1.25+
+* Go [VERSION]+
   ```sh
   go version
   ```
-* `golangci-lint` (optional but recommended)
+* [Other prerequisites - e.g., `golangci-lint`, `swag`, etc.]
   ```sh
-  golangci-lint version
-  ```
-* `swag` CLI for docs generation
-  ```sh
-  go install github.com/swaggo/swag/cmd/swag@latest
+  [installation command]
   ```
 
 ### Installation
 
 1. Clone the repo.
    ```sh
-   git clone https://github.com/capcom6/go-project-template.git
-   cd go-project-template
+   git clone [REPO_URL].git
+   cd [PROJECT_DIRECTORY]
    ```
 2. Download dependencies.
    ```sh
    make deps
    ```
-3. (Optional) Generate OpenAPI docs.
+3. [Optional steps - e.g., Generate docs, run migrations, etc.]
    ```sh
-   make gen
+   [command]
    ```
 4. Build the binary.
    ```sh
@@ -127,27 +128,23 @@ Run the app:
 go run .
 ```
 
-Or use live reload:
+Or use live reload (if configured):
 
 ```sh
 make air
 ```
 
-Default server address is `127.0.0.1:3000`.
+Default server address: `[DEFAULT_ADDRESS]`
 
-Helpful endpoints:
+Key endpoints:
 
-* Health endpoints (via `healthfx`), typically under `/health`.
-* OpenAPI docs: `http://127.0.0.1:3000/api/v1/docs`.
+* Health: `[HEALTH_ENDPOINT]`
+* API docs: `[API_DOCS_URL]`
 
 Configuration:
 
-* Environment variables are loaded via `go-core-fx/config`.
-* You can point to a YAML file using:
-  ```sh
-  export CONFIG_PATH=./config.local.yaml
-  ```
-* Telegram token is configured via the app config (`telegram.token`) and required to use bot handlers.
+* [Explain how configuration works - env vars, YAML files, etc.]
+* [Any other configuration details]
 
 Quality checks:
 
@@ -165,14 +162,23 @@ make coverage
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Fiber API scaffold
-- [x] OpenAPI + Swagger integration
-- [x] Telegram bot wiring
-- [ ] Database module integration
-- [ ] Auth middleware and RBAC
-- [ ] CI release pipeline hardening
+### Completed
 
-See the [open issues](https://github.com/capcom6/go-project-template/issues) for a full list of proposed features (and known issues).
+- [x] [Feature 1]
+- [x] [Feature 2]
+- [x] [Feature 3]
+
+### In Progress
+
+- [ ] [Feature currently being worked on]
+
+### Planned
+
+- [ ] [Future feature 1]
+- [ ] [Future feature 2]
+- [ ] [Future feature 3]
+
+See the [open issues](https://github.com/005-bot/monitor-go/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -210,7 +216,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 Maintainer: [@capcom6](https://github.com/capcom6)
 
-Project Link: [https://github.com/capcom6/go-project-template](https://github.com/capcom6/go-project-template)
+Project Link: [https://github.com/005-bot/monitor-go](https://github.com/005-bot/monitor-go)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -222,24 +228,23 @@ Project Link: [https://github.com/capcom6/go-project-template](https://github.co
 * [Best README Template](https://github.com/othneildrew/Best-README-Template)
 * [Go Fiber](https://github.com/gofiber/fiber)
 * [Uber Fx](https://github.com/uber-go/fx)
-* [Telego](https://github.com/mymmrac/telego)
-* [Shields.io](https://shields.io)
+* [WIP - Add other acknowledgments as needed]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[contributors-shield]: https://img.shields.io/github/contributors/capcom6/go-project-template.svg?style=for-the-badge
-[contributors-url]: https://github.com/capcom6/go-project-template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/capcom6/go-project-template.svg?style=for-the-badge
-[forks-url]: https://github.com/capcom6/go-project-template/network/members
-[stars-shield]: https://img.shields.io/github/stars/capcom6/go-project-template.svg?style=for-the-badge
-[stars-url]: https://github.com/capcom6/go-project-template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/capcom6/go-project-template.svg?style=for-the-badge
-[issues-url]: https://github.com/capcom6/go-project-template/issues
-[license-shield]: https://img.shields.io/github/license/capcom6/go-project-template.svg?style=for-the-badge
-[license-url]: https://github.com/capcom6/go-project-template/blob/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/005-bot/monitor-go.svg?style=for-the-badge
+[contributors-url]: https://github.com/005-bot/monitor-go/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/005-bot/monitor-go.svg?style=for-the-badge
+[forks-url]: https://github.com/005-bot/monitor-go/network/members
+[stars-shield]: https://img.shields.io/github/stars/005-bot/monitor-go.svg?style=for-the-badge
+[stars-url]: https://github.com/005-bot/monitor-go/stargazers
+[issues-shield]: https://img.shields.io/github/issues/005-bot/monitor-go.svg?style=for-the-badge
+[issues-url]: https://github.com/005-bot/monitor-go/issues
+[license-shield]: https://img.shields.io/github/license/005-bot/monitor-go.svg?style=for-the-badge
+[license-url]: https://github.com/005-bot/monitor-go/blob/master/LICENSE
 [go-shield]: https://img.shields.io/badge/go-1.25%2B-00ADD8?style=for-the-badge&logo=go
 [go-url]: https://go.dev/
 [fiber-shield]: https://img.shields.io/badge/Fiber-v2-00b894?style=for-the-badge
@@ -248,5 +253,3 @@ Project Link: [https://github.com/capcom6/go-project-template](https://github.co
 [fx-url]: https://github.com/uber-go/fx
 [swagger-shield]: https://img.shields.io/badge/OpenAPI-Swagger-85EA2D?style=for-the-badge
 [swagger-url]: https://github.com/swaggo/swag
-[telegram-shield]: https://img.shields.io/badge/Telegram-Bot-26A5E4?style=for-the-badge&logo=telegram
-[telegram-url]: https://core.telegram.org/bots
