@@ -3,18 +3,12 @@ package internal
 import (
 	"context"
 
-	"github.com/capcom6/go-project-template/internal/bot"
-	"github.com/capcom6/go-project-template/internal/config"
-	"github.com/capcom6/go-project-template/internal/db"
-	"github.com/capcom6/go-project-template/internal/example"
-	"github.com/capcom6/go-project-template/internal/server"
-	"github.com/go-core-fx/bunfx"
+	"github.com/005-bot/monitor-go/internal/config"
+	"github.com/005-bot/monitor-go/internal/server"
 	"github.com/go-core-fx/fiberfx"
-	"github.com/go-core-fx/goosefx"
 	"github.com/go-core-fx/healthfx"
 	"github.com/go-core-fx/logger"
-	"github.com/go-core-fx/sqlfx"
-	"github.com/go-core-fx/telegofx"
+	"github.com/go-core-fx/redisfx"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -25,31 +19,29 @@ func Run(version healthfx.Version) {
 		logger.Module(),
 		logger.WithFxDefaultLogger(),
 		// badgerfx.Module(),
-		bunfx.Module(),
+		// bunfx.Module(),
 		// cachefx.Module(),
 		fiberfx.Module(),
 		// gocqlfx.Module(),
 		// gocqlxfx.Module(),
-		sqlfx.Module(),
-		goosefx.Module(),
+		// sqlfx.Module(),
+		// goosefx.Module(),
 		// gormfx.Module(),
 		healthfx.Module(),
 		// openrouterfx.Module(),
-		// redisfx.Module(),
+		redisfx.Module(),
 		// sqlxfx.Module(),
-		telegofx.Module(true),
+		// telegofx.Module(true),
 		// validatorfx.Module(),
 		// watermillfx.Module(),
 		//
 		// APP MODULES
 		config.Module(),
-		db.Module(),
 		server.Module(),
-		bot.Module(),
 		//
 		// BUSINESS MODULES
 		fx.Supply(version),
-		example.Module(),
+		// example.Module(),
 		//
 		fx.Invoke(func(lc fx.Lifecycle, logger *zap.Logger) {
 			lc.Append(fx.Hook{
