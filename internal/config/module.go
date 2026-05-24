@@ -1,10 +1,14 @@
 package config
 
 import (
-	"github.com/005-bot/monitor-go/internal/example"
+	"github.com/005-bot/monitor-go/internal/publisher"
+	"github.com/005-bot/monitor-go/internal/scheduler"
+	"github.com/005-bot/monitor-go/internal/scraper"
+	"github.com/005-bot/monitor-go/internal/storage"
 	"github.com/go-core-fx/fiberfx"
 	"github.com/go-core-fx/fiberfx/openapi"
 	"github.com/go-core-fx/redisfx"
+	"github.com/samber/lo"
 	"go.uber.org/fx"
 )
 
@@ -32,11 +36,28 @@ func Module() fx.Option {
 					URL: cfg.Redis.URL,
 				}
 			},
+			func(cfg Config) scraper.Config {
+				return scraper.Config{
+					URL:      cfg.Scraper.URL,
+					Interval: cfg.Scraper.Interval,
+				}
+			},
+			func(cfg Config) storage.Config {
+				return storage.Config{
+					TTLDays: cfg.Storage.TTLDays,
+					Prefix:  lo.CoalesceOrEmpty(cfg.Storage.Prefix, cfg.Redis.Prefix, defaultPrefix),
+				}
+			},
+			func(cfg Config) publisher.Config {
+				return publisher.Config{
+					Prefix: lo.CoalesceOrEmpty(cfg.Publisher.Prefix, cfg.Redis.Prefix, defaultPrefix),
+				}
+			},
+			func(cfg Config) scheduler.Config {
+				return scheduler.Config{
+					Interval: cfg.Scraper.Interval,
+				}
+			},
 		),
-		fx.Provide(func(cfg Config) example.Config {
-			return example.Config{
-				Example: cfg.Example.Example,
-			}
-		}),
 	)
 }

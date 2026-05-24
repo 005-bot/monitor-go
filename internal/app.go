@@ -3,8 +3,14 @@ package internal
 import (
 	"context"
 
+	"github.com/005-bot/monitor-go/internal/addressparser"
 	"github.com/005-bot/monitor-go/internal/config"
+	"github.com/005-bot/monitor-go/internal/parser"
+	"github.com/005-bot/monitor-go/internal/publisher"
+	"github.com/005-bot/monitor-go/internal/scheduler"
+	"github.com/005-bot/monitor-go/internal/scraper"
 	"github.com/005-bot/monitor-go/internal/server"
+	"github.com/005-bot/monitor-go/internal/storage"
 	"github.com/go-core-fx/fiberfx"
 	"github.com/go-core-fx/healthfx"
 	"github.com/go-core-fx/logger"
@@ -41,8 +47,13 @@ func Run(version healthfx.Version) {
 		//
 		// BUSINESS MODULES
 		fx.Supply(version),
-		// example.Module(),
-		//
+		addressparser.Module(),
+		storage.Module(),
+		publisher.Module(),
+		scraper.Module(),
+		parser.Module(),
+		scheduler.Module(),
+
 		fx.Invoke(func(lc fx.Lifecycle, logger *zap.Logger) {
 			lc.Append(fx.Hook{
 				OnStart: func(_ context.Context) error {
