@@ -1,8 +1,8 @@
-// Golang project template
+// Monitor — 005 Бот outage monitoring service
 //
-//	@title			Project API
+//	@title			Monitor API
 //	@version		1.0.0
-//	@description	Project API documentation
+//	@description	Outage monitoring service for 005-bot
 //
 //	@contact.name	API Support
 //	@contact.url	https://github.com/capcom6

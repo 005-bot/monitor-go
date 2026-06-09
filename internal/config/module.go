@@ -1,7 +1,6 @@
 package config
 
 import (
-	"github.com/005-bot/monitor-go/internal/example"
 	"github.com/go-core-fx/fiberfx"
 	"github.com/go-core-fx/fiberfx/openapi"
 	"github.com/go-core-fx/redisfx"
@@ -33,10 +32,5 @@ func Module() fx.Option {
 				}
 			},
 		),
-		fx.Provide(func(cfg Config) example.Config {
-			return example.Config{
-				Example: cfg.Example.Example,
-			}
-		}),
 	)
 }
