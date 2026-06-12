@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/005-bot/monitor-go/internal/storage"
 	"github.com/go-core-fx/fiberfx"
 	"github.com/go-core-fx/fiberfx/openapi"
 	"github.com/go-core-fx/redisfx"
@@ -29,6 +30,12 @@ func Module() fx.Option {
 			func(cfg Config) redisfx.Config {
 				return redisfx.Config{
 					URL: cfg.Redis.URL,
+				}
+			},
+			func(cfg Config) storage.Config {
+				return storage.Config{
+					Prefix:  cfg.Storage.Prefix,
+					TTLDays: cfg.Storage.TTLDays,
 				}
 			},
 		),
