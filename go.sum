@@ -32,6 +32,8 @@ github.com/go-core-fx/logger v0.0.1 h1:e3iJPEfV09fAZnVdROhcpDEbw7DHaNfY/OWCLX0wi
 github.com/go-core-fx/logger v0.0.1/go.mod h1:dvExTnpqUry/Qr0x0rg8UiKVUPv3PBb1JT/0llX5NWc=
 github.com/go-core-fx/redisfx v0.0.0-20251029094515-c9e3d82dfaa2 h1:sBOvVJ3HEOHTKLVhqzGwL15VGzAIoHDm4wPFOu7hRZs=
 github.com/go-core-fx/redisfx v0.0.0-20251029094515-c9e3d82dfaa2/go.mod h1:XUDPoiA2Z3BjbPVr0izYYUiq63nGxqsQNw/fhGWZqUk=
+github.com/go-core-fx/validatorfx v0.0.2 h1:J+POBsdqyT2Hd3TZHgJ+0eBtCPHhHff8TJLcGowQ0Ew=
+github.com/go-core-fx/validatorfx v0.0.2/go.mod h1:1VtQoOEzBo3oapXgRFA65H+zSKvmCvb6yfAcdwpqSlE=
 github.com/go-logr/logr v1.4.3 h1:CjnDlHq8ikf6E492q6eKboGOC0T8CDaOvkHCIg8idEI=
 github.com/go-logr/logr v1.4.3/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
 github.com/go-logr/stdr v1.2.2 h1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=

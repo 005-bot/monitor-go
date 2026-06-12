@@ -1,0 +1,163 @@
+### Variables
+@baseUrl = http://localhost:3000
+
+### ───────────────────────────────────────────
+### Health
+### ───────────────────────────────────────────
+
+### Liveness probe
+GET {{baseUrl}}/health/live
+
+### Readiness probe
+GET {{baseUrl}}/health/ready
+
+### Readiness probe
+GET {{baseUrl}}/health/startup
+
+### ───────────────────────────────────────────
+### Storage — ETag
+### ───────────────────────────────────────────
+
+### Get current ETag
+GET {{baseUrl}}/api/v1/storage/etag
+
+### Set ETag (first time — returns changed: true)
+POST {{baseUrl}}/api/v1/storage/etag
+Content-Type: application/json
+
+{"etag": "abc-123"}
+
+### Set ETag (same value — returns changed: false)
+POST {{baseUrl}}/api/v1/storage/etag
+Content-Type: application/json
+
+{"etag": "abc-123"}
+
+### Set ETag (different value — returns changed: true)
+POST {{baseUrl}}/api/v1/storage/etag
+Content-Type: application/json
+
+{"etag": "def-456"}
+
+### ───────────────────────────────────────────
+### Storage — Diff & Commit
+### ───────────────────────────────────────────
+
+### Diff: first submission (no prior data — returns record)
+POST {{baseUrl}}/api/v1/storage/diff
+Content-Type: application/json
+
+{
+  "records": [
+    {
+      "area": "Советский район",
+      "organization": {
+        "resource": "Горячее водоснабжение",
+        "organization": "АО КТТК",
+        "phones": ["264-18-62"]
+      },
+      "details": {
+        "streets": [
+          { "name": "ул. Ленина", "buildings": ["1", "2"] },
+          { "name": "пр. Мира", "buildings": ["3"] }
+        ],
+        "reason": {
+          "type": "аварийное",
+          "description": "подстанция Радиотехническая фидер 126-01"
+        },
+        "water_deliveries": [
+          {
+            "street": "ул. Ленина",
+            "buildings": "1",
+            "time_start": "10:00",
+            "time_end": "18:00"
+          }
+        ]
+      },
+      "dates": ["2026-06-10T14:00:00+07:00", "2026-06-10T18:00:00+07:00"]
+    }
+  ]
+}
+
+### Commit the records
+POST {{baseUrl}}/api/v1/storage/commit
+Content-Type: application/json
+
+{
+  "records": [
+    {
+      "area": "Советский район",
+      "organization": {
+        "resource": "Горячее водоснабжение",
+        "organization": "АО КТТК",
+        "phones": ["264-18-62"]
+      },
+      "details": {
+        "streets": [
+          { "name": "ул. Ленина", "buildings": ["1", "2"] },
+          { "name": "пр. Мира", "buildings": ["3"] }
+        ],
+        "reason": {
+          "type": "аварийное",
+          "description": "подстанция Радиотехническая фидер 126-01"
+        }
+      },
+      "dates": ["2026-06-10T14:00:00+07:00", "2026-06-10T18:00:00+07:00"]
+    }
+  ]
+}
+
+### Diff: same data again (should return empty)
+POST {{baseUrl}}/api/v1/storage/diff
+Content-Type: application/json
+
+{
+  "records": [
+    {
+      "area": "Советский район",
+      "organization": {
+        "resource": "Горячее водоснабжение",
+        "organization": "АО КТТК",
+        "phones": ["264-18-62"]
+      },
+      "details": {
+        "streets": [
+          { "name": "ул. Ленина", "buildings": ["1", "2"] },
+          { "name": "пр. Мира", "buildings": ["3"] }
+        ],
+        "reason": {
+          "type": "аварийное",
+          "description": "подстанция Радиотехническая фидер 126-01"
+        }
+      },
+      "dates": ["2026-06-10T14:00:00+07:00", "2026-06-10T18:00:00+07:00"]
+    }
+  ]
+}
+
+### Diff: different record (should return it)
+POST {{baseUrl}}/api/v1/storage/diff
+Content-Type: application/json
+
+{
+  "records": [
+    {
+      "area": "Октябрьский район",
+      "organization": {
+        "resource": "Холодное водоснабжение",
+        "organization": "ООО Водоканал",
+        "phones": ["211-11-11"]
+      },
+      "details": {
+        "streets": [
+          { "name": "ул. Новая", "buildings": ["5", "7", "9"] }
+        ],
+        "reason": {
+          "type": "плановая",
+          "description": "ремонтные работы"
+        }
+      },
+      "dates": ["2026-06-11T09:00:00+07:00"]
+    }
+  ]
+}

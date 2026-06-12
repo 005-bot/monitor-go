@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/005-bot/monitor-go/internal/server/docs"
+	"github.com/005-bot/monitor-go/internal/server/handlers"
 	"github.com/go-core-fx/fiberfx"
 	"github.com/go-core-fx/fiberfx/handler"
 	"github.com/go-core-fx/fiberfx/health"
@@ -31,6 +32,7 @@ func Module() fx.Option {
 			openapi.NewHandler,
 			fx.Private,
 		),
+		handlers.Module(),
 
 		// fx.Provide(
 		// 	fx.Annotate(example.New, fx.ResultTags(`group:"handlers"`)),
