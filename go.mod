@@ -3,6 +3,7 @@ module github.com/005-bot/monitor-go
 go 1.25.7
 
 require (
+	github.com/PuerkitoBio/goquery v1.12.0
 	github.com/go-core-fx/config v0.1.0
 	github.com/go-core-fx/fiberfx v0.5.0
 	github.com/go-core-fx/healthfx v0.1.0
@@ -17,11 +18,14 @@ require (
 	github.com/swaggo/swag v1.16.6
 	go.uber.org/fx v1.24.0
 	go.uber.org/zap v1.28.0
+	golang.org/x/net v0.54.0
+	golang.org/x/text v0.37.0
 )
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/andybalholm/brotli v1.2.1 // indirect
+	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/ansrivas/fiberprometheus/v2 v2.17.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -78,7 +82,6 @@ require (
 	golang.org/x/mod v0.36.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.44.0 // indirect
-	golang.org/x/text v0.37.0 // indirect
 	golang.org/x/tools v0.45.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )

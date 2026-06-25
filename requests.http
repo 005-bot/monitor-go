@@ -161,3 +161,10 @@ Content-Type: application/json
     }
   ]
 }
+
+### ───────────────────────────────────────────
+### Scraper
+### ───────────────────────────────────────────
+
+### Run scraper (fetches and parses the target page)
+GET {{baseUrl}}/api/v1/scrape/run

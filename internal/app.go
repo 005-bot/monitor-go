@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/005-bot/monitor-go/internal/config"
+	"github.com/005-bot/monitor-go/internal/scraper"
 	"github.com/005-bot/monitor-go/internal/server"
 	"github.com/005-bot/monitor-go/internal/storage"
 	"github.com/go-core-fx/fiberfx"
@@ -39,6 +40,7 @@ func Run(version healthfx.Version) {
 		//
 		// APP MODULES
 		config.Module(),
+		scraper.Module(),
 		storage.Module(),
 		server.Module(),
 
