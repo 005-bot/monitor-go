@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/005-bot/monitor-go/internal/scraper"
 	"github.com/005-bot/monitor-go/internal/storage"
 	"github.com/go-core-fx/fiberfx"
 	"github.com/go-core-fx/fiberfx/openapi"
@@ -36,6 +37,12 @@ func Module() fx.Option {
 				return storage.Config{
 					Prefix:  cfg.Storage.Prefix,
 					TTLDays: cfg.Storage.TTLDays,
+				}
+			},
+			func(cfg Config) scraper.Config {
+				return scraper.Config{
+					URL:      cfg.Scraper.URL,
+					Interval: cfg.Scraper.Interval,
 				}
 			},
 		),
