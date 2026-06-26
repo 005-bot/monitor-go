@@ -198,12 +198,27 @@ func getText(s *goquery.Selection) string {
 	for _, node := range s.Nodes {
 		writeNodeText(node, &buf)
 	}
-	return collapseWhitespaces(buf.String())
+	return normalizeLines(buf.String())
+}
+
+func normalizeLines(s string) string {
+	lines := strings.Split(s, "\n")
+	for i, line := range lines {
+		lines[i] = strings.Join(strings.Fields(line), " ")
+	}
+	return strings.Join(lines, "\n")
 }
 
 func writeNodeText(n *html.Node, buf *strings.Builder) {
 	if n.Type == html.TextNode {
-		buf.WriteString(n.Data)
+		text := strings.Join(strings.Fields(n.Data), " ")
+		if text == "" {
+			return
+		}
+		if buf.Len() > 0 && buf.String()[buf.Len()-1] != '\n' {
+			buf.WriteByte(' ')
+		}
+		buf.WriteString(text)
 		return
 	}
 	if n.Type == html.ElementNode && n.Data == "br" {

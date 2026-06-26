@@ -168,3 +168,23 @@ Content-Type: application/json
 
 ### Run scraper (fetches and parses the target page)
 GET {{baseUrl}}/api/v1/scrape/run
+
+### ───────────────────────────────────────────
+### Parser
+### ───────────────────────────────────────────
+
+### Parse a single record
+POST {{baseUrl}}/api/v1/parser/record
+Content-Type: application/json
+
+{
+  "record": {
+    "area": "Советский район",
+    "organization": "Горячее водоснабжение\nАО КТТК\nт. 264-18-62\nт. 214-93-51",
+    "address": "ул. Ленина 1, 2; пр. Мира 3, 4\nаварийное - подстанция Радиотехническая фидер 126-01\nПодвоз воды: ул. Ленина 1 с 10:00 до 18:00",
+    "dates": ["2026-06-10T14:00:00+07:00", "2026-06-10T18:00:00+07:00"]
+  }
+}
+
+### Scrape and parse (full pipeline)
+POST {{baseUrl}}/api/v1/parser/scrape-and-parse

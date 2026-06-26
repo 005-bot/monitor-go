@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/005-bot/monitor-go/internal/parser/address"
 	"github.com/005-bot/monitor-go/internal/scraper"
 	"github.com/005-bot/monitor-go/internal/storage"
 	"github.com/go-core-fx/fiberfx"
@@ -43,6 +44,11 @@ func Module() fx.Option {
 				return scraper.Config{
 					URL:      cfg.Scraper.URL,
 					Interval: cfg.Scraper.Interval,
+				}
+			},
+			func(cfg Config) address.Config {
+				return address.Config{
+					DBPath: cfg.Parser.AddressDBPath,
 				}
 			},
 		),
