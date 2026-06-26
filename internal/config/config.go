@@ -44,12 +44,17 @@ type publisherConfig struct {
 	Prefix string `koanf:"prefix"`
 }
 
+type parserConfig struct {
+	AddressDBPath string `koanf:"address_db_path"`
+}
+
 type Config struct {
 	HTTP      http            `koanf:"http"`
 	Redis     redisConfig     `koanf:"redis"`
 	Scraper   scraperConfig   `koanf:"scraper"`
 	Storage   storageConfig   `koanf:"storage"`
 	Publisher publisherConfig `koanf:"publisher"`
+	Parser    parserConfig    `koanf:"parser"`
 }
 
 func Default() Config {
@@ -77,6 +82,9 @@ func Default() Config {
 		},
 		Publisher: publisherConfig{
 			Prefix: "bot-005",
+		},
+		Parser: parserConfig{
+			AddressDBPath: "",
 		},
 	}
 }

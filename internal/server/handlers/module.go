@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/005-bot/monitor-go/internal/server/handlers/parser"
 	"github.com/005-bot/monitor-go/internal/server/handlers/scraper"
 	"github.com/005-bot/monitor-go/internal/server/handlers/storage"
 	"github.com/go-core-fx/fiberfx/handler"
@@ -20,6 +21,11 @@ func Module() fx.Option {
 			),
 			fx.Annotate(
 				scraper.NewHandler,
+				fx.As(new(handler.Handler)),
+				fx.ResultTags(`group:"handlers"`),
+			),
+			fx.Annotate(
+				parser.NewHandler,
 				fx.As(new(handler.Handler)),
 				fx.ResultTags(`group:"handlers"`),
 			),
