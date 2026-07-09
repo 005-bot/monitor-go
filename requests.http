@@ -188,3 +188,13 @@ Content-Type: application/json
 
 ### Scrape and parse (full pipeline)
 POST {{baseUrl}}/api/v1/parser/scrape-and-parse
+
+### ───────────────────────────────────────────
+### Monitor — Scheduler
+### ───────────────────────────────────────────
+
+### Get scheduler status
+GET {{baseUrl}}/api/v1/monitor/status
+
+### Trigger one-shot scheduler cycle
+POST {{baseUrl}}/api/v1/monitor/run
