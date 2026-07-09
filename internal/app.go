@@ -5,6 +5,8 @@ import (
 
 	"github.com/005-bot/monitor-go/internal/config"
 	"github.com/005-bot/monitor-go/internal/parser"
+	"github.com/005-bot/monitor-go/internal/publisher"
+	"github.com/005-bot/monitor-go/internal/scheduler"
 	"github.com/005-bot/monitor-go/internal/scraper"
 	"github.com/005-bot/monitor-go/internal/server"
 	"github.com/005-bot/monitor-go/internal/storage"
@@ -42,7 +44,9 @@ func Run(version healthfx.Version) {
 		// APP MODULES
 		config.Module(),
 		parser.Module(),
+		publisher.Module(),
 		scraper.Module(),
+		scheduler.Module(),
 		storage.Module(),
 		server.Module(),
 

@@ -3,12 +3,14 @@ package config
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/go-core-fx/config"
 )
 
 const (
 	defaultScraperIntervalSec = 300 // 5 minutes in seconds
+	defaultScraperTimeout     = time.Minute
 	defaultStorageTTLDays     = 5
 )
 
@@ -31,8 +33,9 @@ type redisConfig struct {
 }
 
 type scraperConfig struct {
-	URL      string `koanf:"url"`
-	Interval int    `koanf:"interval"`
+	URL      string        `koanf:"url"`
+	Interval int           `koanf:"interval"`
+	Timeout  time.Duration `koanf:"timeout"`
 }
 
 type storageConfig struct {
@@ -75,6 +78,7 @@ func Default() Config {
 		Scraper: scraperConfig{
 			URL:      "http://93.92.65.26/aspx/Gorod.htm",
 			Interval: defaultScraperIntervalSec,
+			Timeout:  defaultScraperTimeout,
 		},
 		Storage: storageConfig{
 			TTLDays: defaultStorageTTLDays,
