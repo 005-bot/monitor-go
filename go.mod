@@ -4,6 +4,7 @@ go 1.25.7
 
 require (
 	github.com/PuerkitoBio/goquery v1.12.0
+	github.com/alicebob/miniredis/v2 v2.38.0
 	github.com/go-core-fx/config v0.1.0
 	github.com/go-core-fx/fiberfx v0.5.1
 	github.com/go-core-fx/healthfx v0.1.0
@@ -76,6 +77,7 @@ require (
 	github.com/swaggo/files/v2 v2.0.2 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.72.0 // indirect
+	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.opentelemetry.io/otel v1.44.0 // indirect
 	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
