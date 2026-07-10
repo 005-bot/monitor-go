@@ -8,6 +8,7 @@ import (
 type Metrics struct {
 	publishesTotal     prometheus.Counter
 	publishErrorsTotal *prometheus.CounterVec
+	durationSeconds    prometheus.Histogram
 }
 
 func NewMetrics() *Metrics {
@@ -20,6 +21,10 @@ func NewMetrics() *Metrics {
 			Name: "publisher_errors_total",
 			Help: "Total number of publish errors",
 		}, []string{"reason"}),
+		durationSeconds: promauto.NewHistogram(prometheus.HistogramOpts{
+			Name: "publisher_duration_seconds",
+			Help: "Duration of publish operations",
+		}),
 	}
 }
 
@@ -29,4 +34,8 @@ func (m *Metrics) IncPublishes() {
 
 func (m *Metrics) IncError(reason string) {
 	m.publishErrorsTotal.WithLabelValues(reason).Inc()
+}
+
+func (m *Metrics) ObserveDuration(seconds float64) {
+	m.durationSeconds.Observe(seconds)
 }

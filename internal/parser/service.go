@@ -3,6 +3,7 @@ package parser
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/005-bot/monitor-go/internal/domain"
 	"github.com/005-bot/monitor-go/internal/parser/organization"
@@ -14,17 +15,28 @@ type Service struct {
 	orgParser    *organization.Parser
 	outageParser *outage.Parser
 	logger       *zap.Logger
+	metrics      *Metrics
 }
 
-func NewService(orgParser *organization.Parser, outageParser *outage.Parser, logger *zap.Logger) *Service {
+func NewService(
+	orgParser *organization.Parser,
+	outageParser *outage.Parser,
+	metrics *Metrics,
+	logger *zap.Logger,
+) *Service {
 	return &Service{
 		orgParser:    orgParser,
 		outageParser: outageParser,
 		logger:       logger,
+		metrics:      metrics,
 	}
 }
 
 func (s *Service) Parse(ctx context.Context, record domain.Record) (domain.ParsedRecord, error) {
+	defer func(start time.Time) {
+		s.metrics.ObserveDuration("parse", time.Since(start).Seconds())
+	}(time.Now())
+
 	orgInfo := s.orgParser.Parse(record.Organization)
 	if orgInfo == nil {
 		return domain.ParsedRecord{}, fmt.Errorf("%w: %q", ErrParseOrganization, record.Organization)
@@ -47,6 +59,11 @@ func (s *Service) Parse(ctx context.Context, record domain.Record) (domain.Parse
 }
 
 func (s *Service) ParseBatch(ctx context.Context, records []domain.Record) ([]domain.ParsedRecord, error) {
+	defer func(start time.Time) {
+		s.metrics.ObserveDuration("parse_batch", time.Since(start).Seconds())
+	}(time.Now())
+	s.metrics.IncOperations("parse_batch")
+
 	parsed := make([]domain.ParsedRecord, 0, len(records))
 
 	for _, record := range records {

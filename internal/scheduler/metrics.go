@@ -6,8 +6,9 @@ import (
 )
 
 type Metrics struct {
-	cyclesTotal prometheus.Counter
-	errorsTotal *prometheus.CounterVec
+	cyclesTotal     prometheus.Counter
+	errorsTotal     *prometheus.CounterVec
+	durationSeconds prometheus.Histogram
 }
 
 func NewMetrics() *Metrics {
@@ -20,6 +21,10 @@ func NewMetrics() *Metrics {
 			Name: "scheduler_errors_total",
 			Help: "Total number of scheduler errors",
 		}, []string{"reason"}),
+		durationSeconds: promauto.NewHistogram(prometheus.HistogramOpts{
+			Name: "scheduler_duration_seconds",
+			Help: "Duration of scheduler cycles",
+		}),
 	}
 }
 
@@ -29,4 +34,8 @@ func (m *Metrics) IncCycles() {
 
 func (m *Metrics) IncError(reason string) {
 	m.errorsTotal.WithLabelValues(reason).Inc()
+}
+
+func (m *Metrics) ObserveDuration(seconds float64) {
+	m.durationSeconds.Observe(seconds)
 }

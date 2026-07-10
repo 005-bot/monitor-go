@@ -151,6 +151,10 @@ func (s *Service) run(ctx context.Context) error {
 	ctx, cancel = context.WithTimeout(ctx, s.cfg.ResolveCycleTimeout())
 	defer cancel()
 
+	defer func(start time.Time) {
+		s.metrics.ObserveDuration(time.Since(start).Seconds())
+	}(time.Now())
+
 	s.metrics.IncCycles()
 	s.logger.Info("running scheduler cycle")
 
