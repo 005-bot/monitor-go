@@ -1,4 +1,4 @@
-package storage
+package parser
 
 import (
 	"github.com/prometheus/client_golang/prometheus"
@@ -6,24 +6,25 @@ import (
 )
 
 type Metrics struct {
-	opsTotal        *prometheus.CounterVec
+	operationsTotal *prometheus.CounterVec
 	durationSeconds *prometheus.HistogramVec
 }
 
 func NewMetrics() *Metrics {
 	return &Metrics{
-		opsTotal: promauto.NewCounterVec(
-			prometheus.CounterOpts{
-				Name: "storage_ops_total",
-				Help: "Total number of storage operations",
-			},
-			[]string{"op"},
-		),
+		operationsTotal: promauto.NewCounterVec(prometheus.CounterOpts{
+			Name: "parser_operations_total",
+			Help: "Total number of parser operations",
+		}, []string{"op"}),
 		durationSeconds: promauto.NewHistogramVec(prometheus.HistogramOpts{
-			Name: "storage_duration_seconds",
-			Help: "Duration of storage operations",
+			Name: "parser_duration_seconds",
+			Help: "Duration of parser operations",
 		}, []string{"op"}),
 	}
+}
+
+func (m *Metrics) IncOperations(op string) {
+	m.operationsTotal.WithLabelValues(op).Inc()
 }
 
 func (m *Metrics) ObserveDuration(op string, seconds float64) {

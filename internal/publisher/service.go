@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/005-bot/monitor-go/internal/domain"
 	"github.com/redis/go-redis/v9"
@@ -28,6 +29,9 @@ func NewService(rdb *redis.Client, cfg Config, metrics *Metrics, logger *zap.Log
 
 func (s *Service) Publish(ctx context.Context, record domain.ParsedRecord) error {
 	s.metrics.IncPublishes()
+	defer func(start time.Time) {
+		s.metrics.ObserveDuration(time.Since(start).Seconds())
+	}(time.Now())
 
 	msg := domain.Outage{
 		Area:             record.Area,

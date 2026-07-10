@@ -8,6 +8,7 @@ import (
 type Metrics struct {
 	scrapesTotal      prometheus.Counter
 	scrapeErrorsTotal *prometheus.CounterVec
+	durationSeconds   prometheus.Histogram
 }
 
 func NewMetrics() *Metrics {
@@ -20,6 +21,10 @@ func NewMetrics() *Metrics {
 			Name: "scraper_errors_total",
 			Help: "Total number of scrape errors",
 		}, []string{"reason"}),
+		durationSeconds: promauto.NewHistogram(prometheus.HistogramOpts{
+			Name: "scraper_duration_seconds",
+			Help: "Duration of scrape operations",
+		}),
 	}
 }
 
@@ -29,4 +34,8 @@ func (m *Metrics) IncTotal() {
 
 func (m *Metrics) IncError(reason string) {
 	m.scrapeErrorsTotal.WithLabelValues(reason).Inc()
+}
+
+func (m *Metrics) ObserveDuration(seconds float64) {
+	m.durationSeconds.Observe(seconds)
 }

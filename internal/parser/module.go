@@ -14,6 +14,10 @@ func Module() fx.Option {
 		logger.WithNamedLogger("parser"),
 		address.Module(),
 		fx.Provide(
+			NewMetrics,
+			fx.Private,
+		),
+		fx.Provide(
 			organization.NewParser,
 			outage.NewParser,
 			NewService,
