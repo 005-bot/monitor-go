@@ -37,7 +37,6 @@
   - [Quick Start](#quick-start)
 - [Usage](#usage)
   - [Environment Variables](#environment-variables)
-  - [Docker Compose](#docker-compose)
   - [Build from Source](#build-from-source)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
@@ -118,35 +117,6 @@ Configuration is loaded via environment variables using the `__` separator (e.g.
 | `PUBLISHER__PREFIX`       | `bot-005`                           | Redis channel prefix        |
 | `PARSER__ADDRESS_DB_PATH` | (embedded `streets.db`)             | Custom SQLite database path |
 
-### Docker Compose
-
-```yaml
-services:
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
-  monitor:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      REDIS__URL: redis://redis:6379
-      SCRAPER__URL: http://93.92.65.26/aspx/Gorod.htm
-      SCRAPER__INTERVAL: "300"
-      STORAGE__TTL_DAYS: "5"
-      STORAGE__PREFIX: bot-005
-      PUBLISHER__PREFIX: bot-005
-    depends_on:
-      redis:
-        condition: service_healthy
-```
 
 ### Build from Source
 
