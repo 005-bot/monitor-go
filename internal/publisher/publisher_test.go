@@ -67,8 +67,7 @@ func makeRecord(area string) domain.ParsedRecord {
 func TestPublish_Success(t *testing.T) {
 	svc, mr := newTestService(t)
 
-	sub := newSubscriber(t, mr)
-	defer sub.Close()
+	_ = newSubscriber(t, mr)
 
 	record := makeRecord("Железнодорожный район")
 	err := svc.Publish(context.Background(), record)
@@ -102,14 +101,10 @@ func newSubscriber(t *testing.T, mr *miniredis.Miniredis) *testSubscriber {
 	t.Cleanup(func() { _ = rdb.Close() })
 
 	pubSub := rdb.Subscribe(context.Background(), "test-prefix:outages")
+	t.Cleanup(func() { _ = pubSub.Close() })
 
 	return &testSubscriber{
 		pubSub: pubSub,
 		rdb:    rdb,
 	}
-}
-
-func (s *testSubscriber) Close() {
-	_ = s.pubSub.Close()
-	s.rdb.Close()
 }

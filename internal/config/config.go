@@ -120,11 +120,17 @@ func New() (Config, error) {
 func (c Config) Validate() error {
 	var errs []error
 
-	if _, err := url.Parse(c.Redis.URL); c.Redis.URL == "" || err != nil {
+	if u, err := url.Parse(
+		c.Redis.URL,
+	); c.Redis.URL == "" || err != nil ||
+		(u.Scheme != "redis" && u.Scheme != "rediss") {
 		errs = append(errs, fmt.Errorf("redis.url: %w", errMsgURLRequired))
 	}
 
-	if _, err := url.Parse(c.Scraper.URL); c.Scraper.URL == "" || err != nil {
+	if u, err := url.Parse(
+		c.Scraper.URL,
+	); c.Scraper.URL == "" || err != nil ||
+		(u.Scheme != "http" && u.Scheme != "https") {
 		errs = append(errs, fmt.Errorf("scraper.url: %w", errMsgURLRequired))
 	}
 
@@ -145,7 +151,7 @@ func (c Config) Validate() error {
 	}
 
 	if len(errs) > 0 {
-		return fmt.Errorf("%w", errors.Join(append([]error{ErrInvalidConfig}, errs...)...))
+		return errors.Join(append([]error{ErrInvalidConfig}, errs...)...)
 	}
 
 	return nil

@@ -76,7 +76,7 @@ func TestValidate_InvalidRedisURL(t *testing.T) {
 
 func TestValidate_InvalidScraperURL(t *testing.T) {
 	cfg := config.Default()
-	cfg.Scraper.URL = ""
+	cfg.Scraper.URL = "://invalid"
 	err := cfg.Validate()
 	if err == nil {
 		t.Fatal("Validate() = nil, want error")

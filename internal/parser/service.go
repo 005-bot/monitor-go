@@ -36,6 +36,7 @@ func (s *Service) Parse(ctx context.Context, record domain.Record) (domain.Parse
 	defer func(start time.Time) {
 		s.metrics.ObserveDuration("parse", time.Since(start).Seconds())
 	}(time.Now())
+	s.metrics.IncOperations("parse")
 
 	orgInfo := s.orgParser.Parse(record.Organization)
 	if orgInfo == nil {

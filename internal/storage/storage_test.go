@@ -2,6 +2,7 @@ package storage_test
 
 import (
 	"context"
+	"errors"
 	"slices"
 	"sync"
 	"testing"
@@ -81,8 +82,8 @@ func TestGetEtag_NotFound(t *testing.T) {
 func TestIsEtagChanged_FirstTime(t *testing.T) {
 	svc, _ := newTestService(t)
 	changed, err := svc.IsEtagChanged(context.Background(), "etag-123")
-	if err == nil {
-		t.Fatal("IsEtagChanged() expected ErrNotFound")
+	if !errors.Is(err, storage.ErrNotFound) {
+		t.Fatalf("IsEtagChanged() expected ErrNotFound, got %v", err)
 	}
 	if !changed {
 		t.Error("IsEtagChanged() = false, want true (first time)")
