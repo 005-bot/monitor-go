@@ -45,9 +45,7 @@ func NewService(cfg Config, storageSvc *storage.Service, metrics *Metrics, logge
 
 func (s *Service) Run(ctx context.Context) ([]domain.Record, error) {
 	s.metrics.IncTotal()
-	defer func(start time.Time) {
-		s.metrics.ObserveDuration(time.Since(start).Seconds())
-	}(time.Now())
+	defer s.metrics.ObserveDuration()()
 	s.logger.Info("running scraper")
 
 	etag, err := s.fetchEtag(ctx)

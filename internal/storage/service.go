@@ -39,9 +39,7 @@ func NewService(rdb *redis.Client, cfg Config, metrics *Metrics, logger *zap.Log
 }
 
 func (s *Service) GetEtag(ctx context.Context) (string, error) {
-	defer func(start time.Time) {
-		s.metrics.ObserveDuration("etag_get", time.Since(start).Seconds())
-	}(time.Now())
+	defer s.metrics.ObserveDuration("etag_get")()
 	s.metrics.opsTotal.WithLabelValues("etag_get").Inc()
 
 	val, err := s.rdb.Get(ctx, s.keyETag).Result()
@@ -56,9 +54,7 @@ func (s *Service) GetEtag(ctx context.Context) (string, error) {
 }
 
 func (s *Service) IsEtagChanged(ctx context.Context, etag string) (bool, error) {
-	defer func(start time.Time) {
-		s.metrics.ObserveDuration("etag_check", time.Since(start).Seconds())
-	}(time.Now())
+	defer s.metrics.ObserveDuration("etag_check")()
 	s.metrics.opsTotal.WithLabelValues("etag_check").Inc()
 
 	redisArgs := redis.SetArgs{Get: true} //nolint:exhaustruct // only setting Get
@@ -74,9 +70,7 @@ func (s *Service) IsEtagChanged(ctx context.Context, etag string) (bool, error) 
 }
 
 func (s *Service) Diff(ctx context.Context, records []domain.ParsedRecord) ([]domain.ParsedRecord, error) {
-	defer func(start time.Time) {
-		s.metrics.ObserveDuration("diff", time.Since(start).Seconds())
-	}(time.Now())
+	defer s.metrics.ObserveDuration("diff")()
 	s.metrics.opsTotal.WithLabelValues("diff").Inc()
 
 	if len(records) == 0 {
@@ -111,9 +105,7 @@ func (s *Service) Diff(ctx context.Context, records []domain.ParsedRecord) ([]do
 }
 
 func (s *Service) Commit(ctx context.Context, records []domain.ParsedRecord) error {
-	defer func(start time.Time) {
-		s.metrics.ObserveDuration("commit", time.Since(start).Seconds())
-	}(time.Now())
+	defer s.metrics.ObserveDuration("commit")()
 	s.metrics.opsTotal.WithLabelValues("commit").Inc()
 
 	if len(records) == 0 {

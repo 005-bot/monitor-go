@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"time"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -27,6 +29,7 @@ func (m *Metrics) IncOperations(op string) {
 	m.operationsTotal.WithLabelValues(op).Inc()
 }
 
-func (m *Metrics) ObserveDuration(op string, seconds float64) {
-	m.durationSeconds.WithLabelValues(op).Observe(seconds)
+func (m *Metrics) ObserveDuration(op string) func() time.Duration {
+	start := prometheus.NewTimer(m.durationSeconds.WithLabelValues(op))
+	return start.ObserveDuration
 }

@@ -1,6 +1,8 @@
 package scheduler
 
 import (
+	"time"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -36,6 +38,7 @@ func (m *Metrics) IncError(reason string) {
 	m.errorsTotal.WithLabelValues(reason).Inc()
 }
 
-func (m *Metrics) ObserveDuration(seconds float64) {
-	m.durationSeconds.Observe(seconds)
+func (m *Metrics) ObserveDuration() func() time.Duration {
+	timer := prometheus.NewTimer(m.durationSeconds)
+	return timer.ObserveDuration
 }

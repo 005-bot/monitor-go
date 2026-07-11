@@ -3,7 +3,6 @@ package parser
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/005-bot/monitor-go/internal/domain"
 	"github.com/005-bot/monitor-go/internal/parser/organization"
@@ -33,9 +32,7 @@ func NewService(
 }
 
 func (s *Service) Parse(ctx context.Context, record domain.Record) (domain.ParsedRecord, error) {
-	defer func(start time.Time) {
-		s.metrics.ObserveDuration("parse", time.Since(start).Seconds())
-	}(time.Now())
+	defer s.metrics.ObserveDuration("parse")()
 	s.metrics.IncOperations("parse")
 
 	orgInfo := s.orgParser.Parse(record.Organization)
@@ -60,9 +57,7 @@ func (s *Service) Parse(ctx context.Context, record domain.Record) (domain.Parse
 }
 
 func (s *Service) ParseBatch(ctx context.Context, records []domain.Record) ([]domain.ParsedRecord, error) {
-	defer func(start time.Time) {
-		s.metrics.ObserveDuration("parse_batch", time.Since(start).Seconds())
-	}(time.Now())
+	defer s.metrics.ObserveDuration("parse_batch")()
 	s.metrics.IncOperations("parse_batch")
 
 	parsed := make([]domain.ParsedRecord, 0, len(records))

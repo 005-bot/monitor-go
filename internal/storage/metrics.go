@@ -1,6 +1,8 @@
 package storage
 
 import (
+	"time"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -27,6 +29,7 @@ func NewMetrics() *Metrics {
 	}
 }
 
-func (m *Metrics) ObserveDuration(op string, seconds float64) {
-	m.durationSeconds.WithLabelValues(op).Observe(seconds)
+func (m *Metrics) ObserveDuration(op string) func() time.Duration {
+	timer := prometheus.NewTimer(m.durationSeconds.WithLabelValues(op))
+	return timer.ObserveDuration
 }
