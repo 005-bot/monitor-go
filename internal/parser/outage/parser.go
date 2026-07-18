@@ -148,10 +148,7 @@ func (p *Parser) parseStreets(ctx context.Context, addressLine string) []domain.
 		}
 
 		match, err := p.addressParser.Normalize(ctx, streetName)
-		if err != nil {
-			continue
-		}
-		if match != nil && match.Confidence >= 0.6 {
+		if err == nil && match != nil && match.Confidence >= 0.6 {
 			streetName = match.Name
 		}
 

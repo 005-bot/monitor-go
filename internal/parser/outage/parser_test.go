@@ -134,6 +134,13 @@ func TestParseMultiLine(t *testing.T) {
 			wantType: "",
 			wantDesc: "",
 		},
+		{
+			name:     "settlement not in street DB is preserved",
+			input:    "город Красноярск: д. Бугачево\nаварийное - устранение аварийной ситуаций на водопроводных сетях",
+			wantStr:  "д. Бугачево",
+			wantType: "аварийное",
+			wantDesc: "устранение аварийной ситуаций на водопроводных сетях",
+		},
 	}
 
 	for _, tt := range tests {
@@ -196,6 +203,7 @@ func TestSplitStreetAndNumbers(t *testing.T) {
 		{"Мира 120", "Мира", "120"},
 		{"Профсоюзов 16, 18", "Профсоюзов", "16, 18"},
 		{"Ленина", "Ленина", ""},
+		{"д. Бугачево", "д. Бугачево", ""},
 	}
 
 	for _, tt := range tests {
