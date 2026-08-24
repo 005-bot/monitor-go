@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	apidev "github.com/005-bot/apis-go"
 	"github.com/005-bot/monitor-go/internal/domain"
 	"github.com/005-bot/monitor-go/internal/publisher"
 	"github.com/alicebob/miniredis/v2"
@@ -52,13 +53,13 @@ func newTestService(t *testing.T) (*publisher.Service, *miniredis.Miniredis) {
 func makeRecord(area string) domain.ParsedRecord {
 	return domain.ParsedRecord{
 		Area: area,
-		Organization: domain.OrganizationInfo{
+		Organization: apidev.OrganizationInfo{
 			Resource:     "Электроснабжение",
 			Organization: "ПАО Россети Сибирь",
 			Phones:       []string{"8-800-220-0-220"},
 		},
-		Details: domain.OutageDetails{
-			Streets: []domain.Street{{Name: "ул. Ленина"}},
+		Details: apidev.OutageDetails{
+			Streets: []apidev.Street{{Name: "ул. Ленина"}},
 		},
 		Dates: []time.Time{time.Now().Add(24 * time.Hour)},
 	}

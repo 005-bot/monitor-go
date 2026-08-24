@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	apidev "github.com/005-bot/apis-go"
 	"github.com/005-bot/monitor-go/internal/domain"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
@@ -30,7 +31,7 @@ func (s *Service) Publish(ctx context.Context, record domain.ParsedRecord) error
 	s.metrics.IncPublishes()
 	defer s.metrics.ObserveDuration()()
 
-	msg := domain.Outage{
+	msg := apidev.Outage{
 		Area:             record.Area,
 		OrganizationInfo: record.Organization,
 		Details:          record.Details,

@@ -3,7 +3,7 @@ package config
 import (
 	"context"
 
-	"github.com/005-bot/monitor-go/internal/parser/address"
+	"github.com/005-bot/address-parser-go"
 	"github.com/005-bot/monitor-go/internal/publisher"
 	"github.com/005-bot/monitor-go/internal/scheduler"
 	"github.com/005-bot/monitor-go/internal/scraper"

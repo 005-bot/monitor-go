@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/005-bot/monitor-go/internal/domain"
+	domain "github.com/005-bot/apis-go"
 )
 
 var phonePrefixRe = regexp.MustCompile(`(?i)^\s*(?:т\.?\s*|тел\.?\s*|т:\s*)`)

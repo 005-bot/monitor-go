@@ -3,7 +3,7 @@ package organization_test
 import (
 	"testing"
 
-	"github.com/005-bot/monitor-go/internal/domain"
+	domain "github.com/005-bot/apis-go"
 	"github.com/005-bot/monitor-go/internal/parser/organization"
 )
 
