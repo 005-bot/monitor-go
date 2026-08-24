@@ -121,25 +121,3 @@ func TestParseDates_SingleDigitDay(t *testing.T) {
 		t.Errorf("day = %d, want 1", dates[0].Day())
 	}
 }
-
-func TestFormatDates(t *testing.T) {
-	now := time.Now()
-	d1 := time.Date(now.Year(), time.March, 12, 10, 0, 0, 0, time.Local)
-	d2 := time.Date(now.Year(), time.March, 13, 14, 30, 0, 0, time.Local)
-	result := date.FormatDates([]time.Time{d1, d2})
-	expected := "12 марта 10-00 13 марта 14-30"
-	if result != expected {
-		t.Errorf("FormatDates = %q, want %q", result, expected)
-	}
-}
-
-func TestFormatDates_Empty(t *testing.T) {
-	result := date.FormatDates(nil)
-	if result != "" {
-		t.Errorf("FormatDates(nil) = %q, want empty", result)
-	}
-	result = date.FormatDates([]time.Time{})
-	if result != "" {
-		t.Errorf("FormatDates([]) = %q, want empty", result)
-	}
-}

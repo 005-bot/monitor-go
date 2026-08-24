@@ -6,8 +6,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/005-bot/monitor-go/internal/domain"
-	"github.com/005-bot/monitor-go/internal/parser/address"
+	"github.com/005-bot/address-parser-go"
+	domain "github.com/005-bot/apis-go"
 )
 
 var parentheticalRe = regexp.MustCompile(`\(.+?\)`)

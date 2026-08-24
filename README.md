@@ -31,13 +31,16 @@
 
 <!-- TABLE OF CONTENTS -->
 - [About The Project](#about-the-project)
+- [Features](#features)
 - [Built With](#built-with)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Quick Start](#quick-start)
 - [Usage](#usage)
-  - [Environment Variables](#environment-variables)
   - [Build from Source](#build-from-source)
+  - [HTTP API](#http-api)
+  - [Make Targets](#make-targets)
+- [Configuration](#configuration)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
@@ -48,17 +51,23 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-`monitor-go` scrapes the Красноярск city outage schedule from [Gorod.htm](http://93.92.65.26/aspx/Gorod.htm), parses the data, detects changes, and publishes new outage records via Redis Pub/Sub. It replaces a legacy Python bot with a modular, testable Go service.
+`monitor-go` scrapes the Красноярск city outage schedule from [Gorod.htm](http://93.92.65.26/aspx/Gorod.htm), parses the data, detects changes, and publishes new outage records via Redis Pub/Sub. It is a modular, testable Go service that replaces a legacy Python service.
 
-Key features:
+The service runs a periodic pipeline (scrape → parse → diff → publish) and also exposes an HTTP API for health checks, manual triggers, and integration with external systems.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- FEATURES -->
+## Features
 
 * **Scheduler** — periodic ticker-based orchestrator that runs the full pipeline on a configurable interval
 * **Scraper** — HTTP client with ETag-based change detection, charset-aware HTML parsing (Windows-1251 via goquery)
 * **Parser** — extracts organization info, Russian addresses, outage details, and Russian date strings; includes an embedded SQLite street name database for normalization
 * **Storage** — Redis-backed diff engine: computes MD5 hashes of parsed records, commits only new/changed entries with TTL
 * **Publisher** — serializes outages as JSON and publishes to a Redis channel (`{prefix}:outages`)
+* **HTTP API** — health probes, Swagger UI, Prometheus metrics, and endpoints to trigger and inspect each pipeline stage
 * **Metrics** — Prometheus counters and histograms for every operation across all modules
-* **Docker** — multi-stage build with docker-compose (includes Redis)
+* **Docker** — minimal container image built via GoReleaser
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -83,42 +92,33 @@ Key features:
   ```sh
   go version
   ```
-* Docker & Docker Compose (for the compose workflow)
+* Docker (for the container workflow)
   ```sh
-  docker --version && docker compose version
+  docker --version
   ```
+* A Redis instance (7.x), either local or containerized — see [Quick Start](#quick-start)
 
 ### Quick Start
 
-```sh
-git clone https://github.com/005-bot/monitor-go.git
-cd monitor-go
-docker compose up
-```
+Build the container image and run it alongside a Redis container:
 
-The service starts on `http://localhost:3000`. No external Redis needed — the compose file includes one with a health check.
+```sh
+make docker-build
+docker run -d --name redis -p 6379:6379 redis:7
+docker run -d --name monitor \
+  -e REDIS__URL=redis://redis:6379 \
+  --link redis \
+  005-bot/monitor-go:$(git describe --tags --abbrev=0 2>/dev/null || echo 0.0.0)
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE -->
 ## Usage
 
-### Environment Variables
-
-Configuration is loaded via environment variables using the `__` separator (e.g. `REDIS__URL`).
-
-| Variable                  | Default                             | Description                 |
-| ------------------------- | ----------------------------------- | --------------------------- |
-| `REDIS__URL`              | `redis://localhost:6379`            | Redis connection URL        |
-| `SCRAPER__URL`            | `http://93.92.65.26/aspx/Gorod.htm` | HTML table source URL       |
-| `SCRAPER__INTERVAL`       | `300`                               | Polling interval in seconds |
-| `STORAGE__TTL_DAYS`       | `5`                                 | Record retention in days    |
-| `STORAGE__PREFIX`         | `bot-005`                           | Redis key prefix            |
-| `PUBLISHER__PREFIX`       | `bot-005`                           | Redis channel prefix        |
-| `PARSER__ADDRESS_DB_PATH` | (embedded `streets.db`)             | Custom SQLite database path |
-
-
 ### Build from Source
+
+Run directly:
 
 ```sh
 go run .
@@ -127,17 +127,51 @@ go run .
 Or build and run the binary:
 
 ```sh
-go build -o monitor .
-./monitor
+make build
+./bin/monitor
 ```
 
-Quality checks:
+### HTTP API
+
+The service exposes an HTTP API (default bind `127.0.0.1:3000`):
+
+* **Health probes** — `GET /health/live`, `GET /health/ready`, `GET /health/startup`
+* **Swagger UI** — `GET /api/v1/docs`
+* **Prometheus metrics** — `GET /metrics`
+* **Pipeline endpoints** — storage (etag/diff/commit), scraper, parser, and monitor (status/run)
+
+Full request examples for every endpoint are available in [`requests.http`](requests.http).
+
+### Make Targets
+
+Common development and quality targets:
 
 ```sh
-make fmt
-make lint
-make test
+make air     # run with live reload (air)
+make test    # run tests with race detector and coverage
+make lint    # run golangci-lint
+make fmt     # format and generate code
+make build   # build the binary into ./bin
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONFIGURATION -->
+## Configuration
+
+Configuration is loaded from environment variables using the `__` separator (e.g. `REDIS__URL`), with optional merge from a YAML file via `CONFIG_PATH`.
+
+| Variable                  | Default                             | Description                          |
+| ------------------------- | ----------------------------------- | ------------------------------------ |
+| `REDIS__URL`              | `redis://localhost:6379`            | Redis connection URL                 |
+| `SCRAPER__URL`            | `http://93.92.65.26/aspx/Gorod.htm` | HTML table source URL                |
+| `SCRAPER__INTERVAL`       | `300`                               | Polling interval in seconds          |
+| `STORAGE__TTL_DAYS`       | `5`                                 | Record retention in days             |
+| `STORAGE__PREFIX`         | `bot-005`                           | Redis key prefix                     |
+| `PUBLISHER__PREFIX`       | `bot-005`                           | Redis channel prefix                 |
+| `PARSER__ADDRESS_DB_PATH` | (embedded `streets.db`)             | Custom SQLite database path          |
+| `HTTP__ADDRESS`           | `127.0.0.1:3000`                    | HTTP server bind address             |
+| `CONFIG_PATH`             | _(unset)_                           | Path to an optional YAML config file |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

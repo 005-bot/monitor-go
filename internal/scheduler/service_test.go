@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/005-bot/address-parser-go"
 	"github.com/005-bot/monitor-go/internal/parser"
-	"github.com/005-bot/monitor-go/internal/parser/address"
 	"github.com/005-bot/monitor-go/internal/parser/organization"
 	"github.com/005-bot/monitor-go/internal/parser/outage"
 	"github.com/005-bot/monitor-go/internal/publisher"

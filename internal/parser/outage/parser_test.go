@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/005-bot/monitor-go/internal/parser/address"
+	"github.com/005-bot/address-parser-go"
 )
 
 func TestParseReason(t *testing.T) {

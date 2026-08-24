@@ -61,35 +61,6 @@ func ParseDates(input string) ([]time.Time, error) {
 	return result, nil
 }
 
-func FormatDates(dates []time.Time) string {
-	parts := make([]string, len(dates))
-	for i, d := range dates {
-		monthName := russianMonthName(d.Month())
-		parts[i] = fmt.Sprintf("%d %s %02d-%02d", d.Day(), monthName, d.Hour(), d.Minute())
-	}
-	return strings.Join(parts, " ")
-}
-
-//nolint:gochecknoglobals // lookup table, not mutable state
-var russianMonthNames = map[time.Month]string{
-	time.January:   "января",
-	time.February:  "февраля",
-	time.March:     "марта",
-	time.April:     "апреля",
-	time.May:       "мая",
-	time.June:      "июня",
-	time.July:      "июля",
-	time.August:    "августа",
-	time.September: "сентября",
-	time.October:   "октября",
-	time.November:  "ноября",
-	time.December:  "декабря",
-}
-
-func russianMonthName(m time.Month) string {
-	return russianMonthNames[m]
-}
-
 func parseInt(s string) int {
 	n := 0
 	for _, c := range []byte(s) {

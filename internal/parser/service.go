@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	apidev "github.com/005-bot/apis-go"
 	"github.com/005-bot/monitor-go/internal/domain"
 	"github.com/005-bot/monitor-go/internal/parser/organization"
 	"github.com/005-bot/monitor-go/internal/parser/outage"
@@ -45,7 +46,7 @@ func (s *Service) Parse(ctx context.Context, record domain.Record) (domain.Parse
 		return domain.ParsedRecord{}, fmt.Errorf("%w: %w", ErrParseOutage, err)
 	}
 	if details == nil {
-		details = &domain.OutageDetails{} //nolint:exhaustruct // zero value is acceptable for empty details
+		details = &apidev.OutageDetails{} //nolint:exhaustruct // zero value is acceptable for empty details
 	}
 
 	return domain.ParsedRecord{
