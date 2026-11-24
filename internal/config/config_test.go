@@ -9,6 +9,7 @@ import (
 )
 
 func TestDefaultIsValid(t *testing.T) {
+	t.Parallel()
 	cfg := config.Default()
 	if err := cfg.Validate(); err != nil {
 		t.Fatalf("Default() Validate() = %v, want nil", err)
@@ -16,6 +17,7 @@ func TestDefaultIsValid(t *testing.T) {
 }
 
 func TestValidate_Errors(t *testing.T) {
+	t.Parallel()
 	cfg := config.Default()
 
 	cfg.Redis.URL = ""
@@ -63,6 +65,7 @@ func TestValidate_Errors(t *testing.T) {
 }
 
 func TestValidate_InvalidRedisURL(t *testing.T) {
+	t.Parallel()
 	cfg := config.Default()
 	cfg.Redis.URL = "://invalid"
 	err := cfg.Validate()
@@ -75,6 +78,7 @@ func TestValidate_InvalidRedisURL(t *testing.T) {
 }
 
 func TestValidate_InvalidScraperURL(t *testing.T) {
+	t.Parallel()
 	cfg := config.Default()
 	cfg.Scraper.URL = "://invalid"
 	err := cfg.Validate()

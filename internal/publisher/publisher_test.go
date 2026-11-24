@@ -14,7 +14,6 @@ import (
 	"go.uber.org/zap"
 )
 
-//nolint:gochecknoglobals // test metrics cache
 var (
 	publisherMetrics     *publisher.Metrics
 	publisherMetricsOnce sync.Once
@@ -66,6 +65,7 @@ func makeRecord(area string) domain.ParsedRecord {
 }
 
 func TestPublish_Success(t *testing.T) {
+	t.Parallel()
 	svc, mr := newTestService(t)
 
 	_ = newSubscriber(t, mr)
@@ -78,6 +78,7 @@ func TestPublish_Success(t *testing.T) {
 }
 
 func TestPublish_NoSubscribers(t *testing.T) {
+	t.Parallel()
 	svc, _ := newTestService(t)
 
 	record := makeRecord("Центральный район")

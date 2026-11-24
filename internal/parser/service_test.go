@@ -15,7 +15,6 @@ import (
 	"go.uber.org/zap"
 )
 
-//nolint:gochecknoglobals // test metrics cache
 var (
 	parserMetrics     *parser.Metrics
 	parserMetricsOnce sync.Once
@@ -55,6 +54,7 @@ func nowPlus(days, hours int) time.Time {
 }
 
 func TestParse_ValidRecord(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(t)
 
 	record := domain.Record{
@@ -81,6 +81,7 @@ func TestParse_ValidRecord(t *testing.T) {
 }
 
 func TestParse_InvalidOrganization(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(t)
 
 	record := domain.Record{
@@ -97,6 +98,7 @@ func TestParse_InvalidOrganization(t *testing.T) {
 }
 
 func TestParseBatch_SkipsFailures(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(t)
 
 	records := []domain.Record{
@@ -127,6 +129,7 @@ func TestParseBatch_SkipsFailures(t *testing.T) {
 }
 
 func TestParseBatch_AllEmpty(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(t)
 
 	parsed, _ := svc.ParseBatch(context.Background(), nil)
@@ -140,6 +143,7 @@ func TestParseBatch_AllEmpty(t *testing.T) {
 }
 
 func TestParse_OrganizationDetectedResourceType(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(t)
 
 	tests := []struct {
@@ -153,6 +157,7 @@ func TestParse_OrganizationDetectedResourceType(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(strings.Split(tt.orgText, "\n")[0], func(t *testing.T) {
+			t.Parallel()
 			record := domain.Record{
 				Area:         "Тестовый район",
 				Organization: tt.orgText,

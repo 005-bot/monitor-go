@@ -8,6 +8,7 @@ import (
 )
 
 func TestParseReason(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name     string
 		input    string
@@ -36,6 +37,7 @@ func TestParseReason(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got := parseReason(tt.input)
 			if got.Type != tt.wantType {
 				t.Errorf("parseReason(%q).Type = %q, want %q", tt.input, got.Type, tt.wantType)
@@ -48,6 +50,7 @@ func TestParseReason(t *testing.T) {
 }
 
 func TestParseCombinedInput(t *testing.T) {
+	t.Parallel()
 	ctx := context.Background()
 	addrParser, parseErr := address.NewParser(address.Config{})
 	if parseErr != nil {
@@ -81,6 +84,7 @@ func TestParseCombinedInput(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, callErr := p.Parse(ctx, tt.input)
 			if callErr != nil {
 				t.Fatalf("Parse(%q) error: %v", tt.input, callErr)
@@ -105,6 +109,7 @@ func TestParseCombinedInput(t *testing.T) {
 }
 
 func TestParseMultiLine(t *testing.T) {
+	t.Parallel()
 	ctx := context.Background()
 	addrParser, parseErr := address.NewParser(address.Config{})
 	if parseErr != nil {
@@ -145,6 +150,7 @@ func TestParseMultiLine(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, callErr := p.Parse(ctx, tt.input)
 			if callErr != nil {
 				t.Fatalf("Parse(%q) error: %v", tt.input, callErr)
@@ -175,6 +181,7 @@ func TestParseMultiLine(t *testing.T) {
 }
 
 func TestParseEmptyInput(t *testing.T) {
+	t.Parallel()
 	ctx := context.Background()
 	addrParser, parseErr := address.NewParser(address.Config{})
 	if parseErr != nil {
@@ -193,6 +200,7 @@ func TestParseEmptyInput(t *testing.T) {
 }
 
 func TestSplitStreetAndNumbers(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input      string
 		wantStreet string
@@ -208,6 +216,7 @@ func TestSplitStreetAndNumbers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
+			t.Parallel()
 			street, nums := splitStreetAndNumbers(tt.input)
 			if street != tt.wantStreet {
 				t.Errorf("splitStreetAndNumbers(%q) street = %q, want %q", tt.input, street, tt.wantStreet)
@@ -220,6 +229,7 @@ func TestSplitStreetAndNumbers(t *testing.T) {
 }
 
 func TestProcessBuildingNumbers(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input string
 		want  []string
@@ -231,6 +241,7 @@ func TestProcessBuildingNumbers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
+			t.Parallel()
 			got := processBuildingNumbers(tt.input)
 			if len(got) != len(tt.want) {
 				t.Fatalf("processBuildingNumbers(%q) = %v, want %v", tt.input, got, tt.want)
@@ -245,6 +256,7 @@ func TestProcessBuildingNumbers(t *testing.T) {
 }
 
 func TestParseWaterDeliveries(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name          string
 		input         string
@@ -269,6 +281,7 @@ func TestParseWaterDeliveries(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got := parseWaterDeliveries(tt.input)
 			if len(got) != tt.want {
 				t.Errorf("parseWaterDeliveries(%q) = %d deliveries, want %d", tt.input, len(got), tt.want)
@@ -307,6 +320,7 @@ func TestParseWaterDeliveries(t *testing.T) {
 }
 
 func TestCityPrefixRegex(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input string
 		want  string
@@ -319,6 +333,7 @@ func TestCityPrefixRegex(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
+			t.Parallel()
 			got := cityPrefixRe.ReplaceAllString(tt.input, "")
 			if got != tt.want {
 				t.Errorf("cityPrefixRe.ReplaceAll(%q) = %q, want %q", tt.input, got, tt.want)

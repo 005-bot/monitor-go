@@ -6,7 +6,7 @@ import (
 	"github.com/005-bot/monitor-go/internal/scraper"
 	"github.com/go-core-fx/fiberfx/handler"
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -51,7 +51,7 @@ type parseRecordResponse struct {
 	Record domain.ParsedRecord `json:"record"`
 }
 
-func (h *Handler) parseRecord(c *fiber.Ctx) error {
+func (h *Handler) parseRecord(c fiber.Ctx) error {
 	var req parseRecordRequest
 	if err := h.BodyParserValidator(c, &req); err != nil {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{errKey: err.Error()})
@@ -71,7 +71,7 @@ type scrapeAndParseResponse struct {
 	Count   int                   `json:"count"`
 }
 
-func (h *Handler) scrapeAndParse(c *fiber.Ctx) error {
+func (h *Handler) scrapeAndParse(c fiber.Ctx) error {
 	records, err := h.scraperSvc.Run(c.Context())
 	if err != nil {
 		h.logger.Error("scrape run failed", zap.Error(err))

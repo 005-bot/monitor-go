@@ -4,7 +4,7 @@ import (
 	"github.com/005-bot/monitor-go/internal/scheduler"
 	"github.com/go-core-fx/fiberfx/handler"
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -39,7 +39,7 @@ type statusResponse struct {
 	LastRunAt *string `json:"last_run_at"`
 }
 
-func (h *Handler) status(c *fiber.Ctx) error {
+func (h *Handler) status(c fiber.Ctx) error {
 	status := h.schedulerSvc.Status()
 
 	var lastRunAt *string
@@ -58,7 +58,7 @@ type runResponse struct {
 	Success bool `json:"success"`
 }
 
-func (h *Handler) run(c *fiber.Ctx) error {
+func (h *Handler) run(c fiber.Ctx) error {
 	if err := h.schedulerSvc.Run(c.Context()); err != nil {
 		h.logger.Error("monitor run failed", zap.Error(err))
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{errKey: err.Error()})
