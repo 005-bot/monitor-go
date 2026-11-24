@@ -62,7 +62,7 @@ The service runs a periodic pipeline (scrape → parse → diff → publish) and
 
 * **Scheduler** — periodic ticker-based orchestrator that runs the full pipeline on a configurable interval
 * **Scraper** — HTTP client with ETag-based change detection, charset-aware HTML parsing (Windows-1251 via goquery)
-* **Parser** — extracts organization info, Russian addresses, outage details, and Russian date strings; includes an embedded SQLite street name database for normalization
+* **Parser** — extracts organization info, Russian addresses, outage details, and Russian date strings; address normalization uses the shared `address-parser-go` library and its embedded streets database
 * **Storage** — Redis-backed diff engine: computes MD5 hashes of parsed records, commits only new/changed entries with TTL
 * **Publisher** — serializes outages as JSON and publishes to a Redis channel (`{prefix}:outages`)
 * **HTTP API** — health probes, Swagger UI, Prometheus metrics, and endpoints to trigger and inspect each pipeline stage
@@ -88,7 +88,7 @@ The service runs a periodic pipeline (scrape → parse → diff → publish) and
 
 ### Prerequisites
 
-* Go 1.25+ (for source builds)
+* Go 1.26+ (for source builds)
   ```sh
   go version
   ```
@@ -128,7 +128,7 @@ Or build and run the binary:
 
 ```sh
 make build
-./bin/monitor
+./bin/monitor-go
 ```
 
 ### HTTP API
@@ -148,7 +148,7 @@ Common development and quality targets:
 
 ```sh
 make air     # run with live reload (air)
-make test    # run tests with race detector and coverage
+make test    # run tests with race detector and coverage profile
 make lint    # run golangci-lint
 make fmt     # format and generate code
 make build   # build the binary into ./bin
@@ -159,19 +159,25 @@ make build   # build the binary into ./bin
 <!-- CONFIGURATION -->
 ## Configuration
 
-Configuration is loaded from environment variables using the `__` separator (e.g. `REDIS__URL`), with optional merge from a YAML file via `CONFIG_PATH`.
+Configuration is loaded from environment variables using the `__` separator (e.g. `REDIS__URL`). The process environment overrides a local `.env` file, which overrides the optional YAML file set via `CONFIG_PATH`. See [`.env.example`](.env.example) for a documented template.
 
-| Variable                  | Default                             | Description                          |
-| ------------------------- | ----------------------------------- | ------------------------------------ |
-| `REDIS__URL`              | `redis://localhost:6379`            | Redis connection URL                 |
-| `SCRAPER__URL`            | `http://93.92.65.26/aspx/Gorod.htm` | HTML table source URL                |
-| `SCRAPER__INTERVAL`       | `300`                               | Polling interval in seconds          |
-| `STORAGE__TTL_DAYS`       | `5`                                 | Record retention in days             |
-| `STORAGE__PREFIX`         | `bot-005`                           | Redis key prefix                     |
-| `PUBLISHER__PREFIX`       | `bot-005`                           | Redis channel prefix                 |
-| `PARSER__ADDRESS_DB_PATH` | (embedded `streets.db`)             | Custom SQLite database path          |
-| `HTTP__ADDRESS`           | `127.0.0.1:3000`                    | HTTP server bind address             |
-| `CONFIG_PATH`             | _(unset)_                           | Path to an optional YAML config file |
+| Variable                     | Default                             | Description                                           |
+| ---------------------------- | ----------------------------------- | ----------------------------------------------------- |
+| `CONFIG_PATH`                | _(unset)_                           | Optional YAML config file, lowest precedence          |
+| `HTTP__ADDRESS`              | `127.0.0.1:3000`                    | HTTP server bind address                              |
+| `HTTP__PROXY_HEADER`         | `X-Forwarded-For`                   | Header used to resolve the client IP behind a proxy   |
+| `HTTP__PROXIES`              | _(empty)_                           | JSON array of trusted proxy IPs/CIDRs                 |
+| `HTTP__OPENAPI__ENABLED`     | `true`                              | Serve the Swagger UI and `doc.json`                   |
+| `HTTP__OPENAPI__PUBLIC_HOST` | _(empty)_                           | Host written into the generated OpenAPI document      |
+| `HTTP__OPENAPI__PUBLIC_PATH` | _(empty)_                           | Base path written into the generated OpenAPI document |
+| `REDIS__URL`                 | `redis://localhost:6379`            | Redis connection URL                                  |
+| `SCRAPER__URL`               | `http://93.92.65.26/aspx/Gorod.htm` | HTML table source URL                                 |
+| `SCRAPER__INTERVAL`          | `300`                               | Seconds between scheduler cycles                      |
+| `SCRAPER__TIMEOUT`           | `1m`                                | Cycle timeout, clamped to `SCRAPER__INTERVAL`         |
+| `STORAGE__TTL_DAYS`          | `5`                                 | Record retention in days                              |
+| `STORAGE__PREFIX`            | `bot-005`                           | Redis key prefix                                      |
+| `PUBLISHER__PREFIX`          | `bot-005`                           | Redis channel prefix (`<prefix>:outages`)             |
+| `PARSER__ADDRESS_DB_PATH`    | _(empty — embedded DB)_             | Optional external SQLite streets database             |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -242,9 +248,9 @@ Project Link: [https://github.com/005-bot/monitor-go](https://github.com/005-bot
 [issues-url]: https://github.com/005-bot/monitor-go/issues
 [license-shield]: https://img.shields.io/github/license/005-bot/monitor-go.svg?style=for-the-badge
 [license-url]: https://github.com/005-bot/monitor-go/blob/master/LICENSE
-[go-shield]: https://img.shields.io/badge/go-1.25%2B-00ADD8?style=for-the-badge&logo=go
+[go-shield]: https://img.shields.io/badge/go-1.26%2B-00ADD8?style=for-the-badge&logo=go
 [go-url]: https://go.dev/
-[fiber-shield]: https://img.shields.io/badge/Fiber-v2-00b894?style=for-the-badge&logo=go
+[fiber-shield]: https://img.shields.io/badge/Fiber-v3-00b894?style=for-the-badge&logo=go
 [fiber-url]: https://github.com/gofiber/fiber
 [fx-shield]: https://img.shields.io/badge/Uber%20Fx-DI-6f42c1?style=for-the-badge&logo=go
 [fx-url]: https://github.com/uber-go/fx

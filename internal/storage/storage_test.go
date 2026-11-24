@@ -16,7 +16,6 @@ import (
 	"go.uber.org/zap"
 )
 
-//nolint:gochecknoglobals // test metrics cache
 var (
 	storageMetrics     *storage.Metrics
 	storageMetricsOnce sync.Once
@@ -70,6 +69,7 @@ func makeRecord(street, reason string) domain.ParsedRecord {
 }
 
 func TestGetEtag_NotFound(t *testing.T) {
+	t.Parallel()
 	svc, _ := newTestService(t)
 	etag, err := svc.GetEtag(context.Background())
 	if err != nil {
@@ -81,6 +81,7 @@ func TestGetEtag_NotFound(t *testing.T) {
 }
 
 func TestIsEtagChanged_FirstTime(t *testing.T) {
+	t.Parallel()
 	svc, _ := newTestService(t)
 	changed, err := svc.IsEtagChanged(context.Background(), "etag-123")
 	if !errors.Is(err, storage.ErrNotFound) {
@@ -92,6 +93,7 @@ func TestIsEtagChanged_FirstTime(t *testing.T) {
 }
 
 func TestIsEtagChanged_SameEtag(t *testing.T) {
+	t.Parallel()
 	svc, mr := newTestService(t)
 	mr.Set("test-prefix:etag", "etag-123")
 
@@ -105,6 +107,7 @@ func TestIsEtagChanged_SameEtag(t *testing.T) {
 }
 
 func TestIsEtagChanged_DifferentEtag(t *testing.T) {
+	t.Parallel()
 	svc, mr := newTestService(t)
 	mr.Set("test-prefix:etag", "etag-old")
 
@@ -118,6 +121,7 @@ func TestIsEtagChanged_DifferentEtag(t *testing.T) {
 }
 
 func TestHashV2_Deterministic(t *testing.T) {
+	t.Parallel()
 	svc, _ := newTestService(t)
 	r1 := makeRecord("ул. Ленина", "плановая проверка")
 	r2 := makeRecord("ул. Ленина", "плановая проверка")
@@ -130,6 +134,7 @@ func TestHashV2_Deterministic(t *testing.T) {
 }
 
 func TestHashV2_DifferentStreetDifferentHash(t *testing.T) {
+	t.Parallel()
 	svc, _ := newTestService(t)
 	r1 := makeRecord("ул. Ленина", "плановая")
 	r2 := makeRecord("ул. Мира", "плановая")
@@ -142,6 +147,7 @@ func TestHashV2_DifferentStreetDifferentHash(t *testing.T) {
 }
 
 func TestDiff_NoExistingRecords(t *testing.T) {
+	t.Parallel()
 	svc, _ := newTestService(t)
 
 	records := []domain.ParsedRecord{
@@ -158,6 +164,7 @@ func TestDiff_NoExistingRecords(t *testing.T) {
 }
 
 func TestDiff_AllExisting(t *testing.T) {
+	t.Parallel()
 	svc, mr := newTestService(t)
 
 	record := makeRecord("ул. Ленина", "плановая")
@@ -174,6 +181,7 @@ func TestDiff_AllExisting(t *testing.T) {
 }
 
 func TestDiff_EmptyInput(t *testing.T) {
+	t.Parallel()
 	svc, _ := newTestService(t)
 
 	changed, err := svc.Diff(context.Background(), nil)
@@ -194,6 +202,7 @@ func TestDiff_EmptyInput(t *testing.T) {
 }
 
 func TestCommit_NewRecords(t *testing.T) {
+	t.Parallel()
 	svc, mr := newTestService(t)
 
 	records := []domain.ParsedRecord{
@@ -212,6 +221,7 @@ func TestCommit_NewRecords(t *testing.T) {
 }
 
 func TestCommit_EmptyInput(t *testing.T) {
+	t.Parallel()
 	svc, _ := newTestService(t)
 
 	err := svc.Commit(context.Background(), nil)
@@ -226,6 +236,7 @@ func TestCommit_EmptyInput(t *testing.T) {
 }
 
 func TestGetEtag_AfterSet(t *testing.T) {
+	t.Parallel()
 	svc, mr := newTestService(t)
 	mr.Set("test-prefix:etag", "my-etag-value")
 

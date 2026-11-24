@@ -46,7 +46,7 @@ func (s *Service) Parse(ctx context.Context, record domain.Record) (domain.Parse
 		return domain.ParsedRecord{}, fmt.Errorf("%w: %w", ErrParseOutage, err)
 	}
 	if details == nil {
-		details = &apidev.OutageDetails{} //nolint:exhaustruct // zero value is acceptable for empty details
+		details = &apidev.OutageDetails{} //nolint:exhaustruct_v5 // zero value is acceptable for empty details
 	}
 
 	return domain.ParsedRecord{

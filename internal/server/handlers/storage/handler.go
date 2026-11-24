@@ -7,7 +7,7 @@ import (
 	"github.com/005-bot/monitor-go/internal/storage"
 	"github.com/go-core-fx/fiberfx/handler"
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -48,7 +48,7 @@ type etagResponse struct {
 	Changed bool `json:"changed"`
 }
 
-func (h *Handler) postEtag(c *fiber.Ctx) error {
+func (h *Handler) postEtag(c fiber.Ctx) error {
 	var req etagRequest
 	if err := h.BodyParserValidator(c, &req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{errKey: err.Error()})
@@ -67,7 +67,7 @@ type currentEtagResponse struct {
 	Etag string `json:"etag"`
 }
 
-func (h *Handler) getEtag(c *fiber.Ctx) error {
+func (h *Handler) getEtag(c fiber.Ctx) error {
 	val, err := h.storageSvc.GetEtag(c.Context())
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{errKey: "etag not set"})
@@ -85,9 +85,9 @@ type diffResponse struct {
 	Count   int                   `json:"count"`
 }
 
-func (h *Handler) postDiff(c *fiber.Ctx) error {
+func (h *Handler) postDiff(c fiber.Ctx) error {
 	var req diffRequest
-	if err := c.BodyParser(&req); err != nil {
+	if err := c.Bind().Body(&req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{errKey: err.Error()})
 	}
 
@@ -112,9 +112,9 @@ type commitResponse struct {
 	Committed int `json:"committed"`
 }
 
-func (h *Handler) postCommit(c *fiber.Ctx) error {
+func (h *Handler) postCommit(c fiber.Ctx) error {
 	var req commitRequest
-	if err := c.BodyParser(&req); err != nil {
+	if err := c.Bind().Body(&req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{errKey: err.Error()})
 	}
 

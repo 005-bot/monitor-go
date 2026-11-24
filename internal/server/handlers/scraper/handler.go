@@ -5,7 +5,7 @@ import (
 	"github.com/005-bot/monitor-go/internal/scraper"
 	"github.com/go-core-fx/fiberfx/handler"
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -39,7 +39,7 @@ type runResponse struct {
 	Count   int             `json:"count"`
 }
 
-func (h *Handler) run(c *fiber.Ctx) error {
+func (h *Handler) run(c fiber.Ctx) error {
 	records, err := h.scraperSvc.Run(c.Context())
 	if err != nil {
 		h.logger.Error("scrape run failed", zap.Error(err))

@@ -17,6 +17,7 @@ func mustParse(t *testing.T, input string) []time.Time {
 }
 
 func TestParseDates_SingleDate(t *testing.T) {
+	t.Parallel()
 	now := time.Now()
 	dates := mustParse(t, "12 марта 10-00")
 	if len(dates) != 1 {
@@ -41,6 +42,7 @@ func TestParseDates_SingleDate(t *testing.T) {
 }
 
 func TestParseDates_MultipleDates(t *testing.T) {
+	t.Parallel()
 	dates := mustParse(t, "12 марта 10-00 13 марта 14-30")
 	if len(dates) != 2 {
 		t.Fatalf("expected 2 dates, got %d", len(dates))
@@ -48,6 +50,7 @@ func TestParseDates_MultipleDates(t *testing.T) {
 }
 
 func TestParseDates_Midnight24(t *testing.T) {
+	t.Parallel()
 	dates := mustParse(t, "15 апреля 24-00")
 	if len(dates) != 1 {
 		t.Fatalf("expected 1 date, got %d", len(dates))
@@ -59,6 +62,7 @@ func TestParseDates_Midnight24(t *testing.T) {
 }
 
 func TestParseDates_ColonSeparator(t *testing.T) {
+	t.Parallel()
 	dates := mustParse(t, "12 марта 10:00")
 	if len(dates) != 1 {
 		t.Fatalf("expected 1 date, got %d", len(dates))
@@ -70,6 +74,7 @@ func TestParseDates_ColonSeparator(t *testing.T) {
 }
 
 func TestParseDates_EmptyInput(t *testing.T) {
+	t.Parallel()
 	dates, err := date.ParseDates("")
 	if err != nil {
 		t.Fatalf("ParseDates('') unexpected error: %v", err)
@@ -80,6 +85,7 @@ func TestParseDates_EmptyInput(t *testing.T) {
 }
 
 func TestParseDates_NoDate(t *testing.T) {
+	t.Parallel()
 	dates, err := date.ParseDates("some random text without dates")
 	if err != nil {
 		t.Fatalf("ParseDates() unexpected error: %v", err)
@@ -90,6 +96,7 @@ func TestParseDates_NoDate(t *testing.T) {
 }
 
 func TestParseDates_AllMonths(t *testing.T) {
+	t.Parallel()
 	months := []string{
 		"января", "февраля", "марта", "апреля", "мая", "июня",
 		"июля", "августа", "сентября", "октября", "ноября", "декабря",
@@ -106,6 +113,7 @@ func TestParseDates_AllMonths(t *testing.T) {
 }
 
 func TestParseDates_UnknownMonth(t *testing.T) {
+	t.Parallel()
 	_, err := date.ParseDates("12 неизвестный 10-00")
 	if err == nil {
 		t.Fatal("expected error for unknown month")
@@ -113,6 +121,7 @@ func TestParseDates_UnknownMonth(t *testing.T) {
 }
 
 func TestParseDates_SingleDigitDay(t *testing.T) {
+	t.Parallel()
 	dates := mustParse(t, "1 мая 08-00")
 	if len(dates) != 1 {
 		t.Fatalf("expected 1 date, got %d", len(dates))

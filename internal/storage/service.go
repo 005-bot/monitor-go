@@ -57,7 +57,7 @@ func (s *Service) IsEtagChanged(ctx context.Context, etag string) (bool, error) 
 	defer s.metrics.ObserveDuration("etag_check")()
 	s.metrics.opsTotal.WithLabelValues("etag_check").Inc()
 
-	redisArgs := redis.SetArgs{Get: true} //nolint:exhaustruct // only setting Get
+	redisArgs := redis.SetArgs{Get: true} //nolint:exhaustruct_v5 // only setting Get
 	old, err := s.rdb.SetArgs(ctx, s.keyETag, etag, redisArgs).Result()
 	if errors.Is(err, redis.Nil) {
 		return true, ErrNotFound

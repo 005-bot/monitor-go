@@ -18,7 +18,6 @@ import (
 	"golang.org/x/text/transform"
 )
 
-//nolint:gochecknoglobals // test metrics cache
 var (
 	scraperMetrics     *scraper.Metrics
 	scraperMetricsOnce sync.Once
@@ -80,6 +79,7 @@ func newStorageService(t *testing.T, mr *miniredis.Miniredis) *storage.Service {
 }
 
 func TestRun_Success(t *testing.T) {
+	t.Parallel()
 	html := `<html><body><table>
 <tr><td></td><td>Железнодорожный район</td><td></td></tr>
 <tr><td>Горячее водоснабжение<br/>АО КТТК<br/>т. 264-18-62</td><td>ул. Ленина, 1<br/>плановая проверка</td><td>12 марта 10-00</td></tr>
@@ -115,6 +115,7 @@ func TestRun_Success(t *testing.T) {
 }
 
 func TestRun_EtagNotChanged(t *testing.T) {
+	t.Parallel()
 	html := `<html><body><table>
 <tr><td></td><td>Железнодорожный район</td><td></td></tr>
 <tr><td>Горячее водоснабжение<br/>АО КТТК<br/>т. 264-18-62</td><td>ул. Ленина, 1<br/>плановая проверка</td><td>12 марта 10-00</td></tr>
@@ -148,6 +149,7 @@ func TestRun_EtagNotChanged(t *testing.T) {
 }
 
 func TestRun_EtagChanged(t *testing.T) {
+	t.Parallel()
 	html := `<html><body><table>
 <tr><td></td><td>Октябрьский район</td><td></td></tr>
 <tr><td>Электроснабжение<br/>ПАО Россети Сибирь<br/>т. 8-800-220-0-220</td><td>ул. Мира, 5<br/>аварийный ремонт</td><td>13 марта 14-00</td></tr>
@@ -181,6 +183,7 @@ func TestRun_EtagChanged(t *testing.T) {
 }
 
 func TestRun_NoEtagInResponse(t *testing.T) {
+	t.Parallel()
 	html := `<html><body><table>
 <tr><td></td><td>Советский район</td><td></td></tr>
 <tr><td>Горячее водоснабжение<br/>ООО СибЭР<br/>т. 214-93-51</td><td>ул. Вавилова, 10<br/>плановая проверка</td><td>15 марта 09-00</td></tr>
@@ -213,6 +216,7 @@ func TestRun_NoEtagInResponse(t *testing.T) {
 }
 
 func TestRun_NoTable(t *testing.T) {
+	t.Parallel()
 	html := `<html><body><p>no table here</p></body></html>`
 
 	srv := newTestServer(html, "etag-789")

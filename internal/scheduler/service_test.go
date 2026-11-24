@@ -26,7 +26,6 @@ import (
 	"golang.org/x/text/transform"
 )
 
-//nolint:gochecknoglobals // test metrics cache
 var (
 	schedMetrics              *scheduler.Metrics
 	schedMetricsOnce          sync.Once
@@ -145,6 +144,7 @@ func subscribeToChannel(t *testing.T, mr *miniredis.Miniredis, channel string) {
 }
 
 func TestRun_FullCycle(t *testing.T) {
+	t.Parallel()
 	html := `<html><body><table>
 <tr><td></td><td>Железнодорожный район</td><td></td></tr>
 <tr><td>Горячее водоснабжение<br/>АО КТТК<br/>т. 264-18-62</td><td>ул. Ленина, 1<br/>плановая проверка</td><td>` + futureDateStr() + ` 10-00</td></tr>
@@ -159,6 +159,7 @@ func TestRun_FullCycle(t *testing.T) {
 }
 
 func TestRun_EtagNotChanged(t *testing.T) {
+	t.Parallel()
 	html := `<html><body><table>
 <tr><td></td><td>Железнодорожный район</td><td></td></tr>
 <tr><td>Горячее водоснабжение<br/>АО КТТК<br/>т. 264-18-62</td><td>ул. Ленина, 1<br/>плановая проверка</td><td>` + futureDateStr() + ` 10-00</td></tr>
@@ -174,6 +175,7 @@ func TestRun_EtagNotChanged(t *testing.T) {
 }
 
 func TestRun_EmptyHTML(t *testing.T) {
+	t.Parallel()
 	html := `<html><body>no table</body></html>`
 
 	env := newTestEnv(t, html, 300)
@@ -185,6 +187,7 @@ func TestRun_EmptyHTML(t *testing.T) {
 }
 
 func TestRun_AllRecordsInPast(t *testing.T) {
+	t.Parallel()
 	html := `<html><body><table>
 <tr><td></td><td>Кировский район</td><td></td></tr>
 <tr><td>Горячее водоснабжение<br/>АО КТТК<br/>т. 264-18-62</td><td>ул. Ленина, 1<br/>плановая проверка</td><td>01 января 00-00</td></tr>
@@ -199,6 +202,7 @@ func TestRun_AllRecordsInPast(t *testing.T) {
 }
 
 func TestStartStop(t *testing.T) {
+	t.Parallel()
 	html := `<html><body><table>
 <tr><td></td><td>Октябрьский район</td><td></td></tr>
 <tr><td>Электроснабжение<br/>ПАО Россети Сибирь<br/>т. 8-800-220-0-220</td><td>ул. Мира, 5<br/>аварийный ремонт</td><td>` + futureDateStr() + ` 10-00</td></tr>
@@ -216,6 +220,7 @@ func TestStartStop(t *testing.T) {
 }
 
 func TestStatus(t *testing.T) {
+	t.Parallel()
 	env := newTestEnv(t, `<html><body></body></html>`, 300)
 
 	status := env.scheduler.Status()
@@ -228,6 +233,7 @@ func TestStatus(t *testing.T) {
 }
 
 func TestNewService_InvalidInterval(t *testing.T) {
+	t.Parallel()
 	_, err := scheduler.NewService(
 		scheduler.Config{Interval: 0},
 		nil, nil, nil, nil,
